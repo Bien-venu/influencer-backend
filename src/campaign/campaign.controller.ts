@@ -1,8 +1,16 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
-
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('campaigns')
 export class CampaignController {
@@ -24,12 +32,14 @@ export class CampaignController {
     return campaign;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(':campaignId/submit')
   async submitContent(
     @Param('campaignId') campaignId: string,
-    @Body('userId') userId: string,
     @Body('content') content: string,
+    @Request() req: any,
   ) {
+    const userId = req.user.userId;
     return this.campaignService.submitContent(campaignId, userId, content);
   }
 
