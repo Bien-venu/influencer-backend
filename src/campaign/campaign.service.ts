@@ -23,10 +23,23 @@ export class CampaignService {
     return campaign;
   }
 
-  async submitContent(campaignId: string, userId: string, content: string) {
+  async submitContent(
+    campaignId: string,
+    userId: string,
+    content: string,
+    submissionDate: Date,
+  ) {
     return this.campaignModel.findByIdAndUpdate(
       campaignId,
-      { $push: { submissions: { userId, content } } },
+      {
+        $push: {
+          submissions: {
+            userId,
+            content,
+            submissionDate,
+          },
+        },
+      },
       { new: true },
     );
   }

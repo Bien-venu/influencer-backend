@@ -36,11 +36,20 @@ export class CampaignController {
   @Post(':campaignId/submit')
   async submitContent(
     @Param('campaignId') campaignId: string,
-    @Body('content') content: string,
     @Request() req: any,
+    @Body('content') content: string,
+    @Body('submissionDate') submissionDate?: string,
   ) {
     const userId = req.user.userId;
-    return this.campaignService.submitContent(campaignId, userId, content);
+
+    const dateToSubmit = submissionDate ? new Date(submissionDate) : new Date();
+
+    return this.campaignService.submitContent(
+      campaignId,
+      userId,
+      content,
+      dateToSubmit,
+    );
   }
 
   @Post()
