@@ -13,11 +13,6 @@ export class CampaignController {
     return this.campaignService.getAllCampaigns();
   }
 
-  @Get(':userId')
-  async getCampaigns(@Param('userId') userId: string) {
-    return this.campaignService.getCampaignsByUser(userId);
-  }
-
   @Get(':id')
   async getCampaignById(@Param('id') id: string) {
     const campaign = await this.campaignService.getCampaignById(id);

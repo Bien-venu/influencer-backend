@@ -15,12 +15,9 @@ export class CampaignService {
     return this.campaignModel.find().exec();
   }
 
-  async getCampaignsByUser(userId: string) {
-    return this.campaignModel.find({ 'submissions.userId': userId });
-  }
-
   async getCampaignById(id: string): Promise<Campaign | null> {
-    const campaign = await this.campaignModel.findById(id).exec();
+    console.log(id);
+    const campaign = await this.campaignModel.findById(id);
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
