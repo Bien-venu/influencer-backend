@@ -18,7 +18,8 @@ export class CampaignController {
 
   @Get(':campaignId')
   async getCampaignById(@Param('campaignId') campaignId: string) {
-    return this.campaignService.getCampaignById(campaignId);
+    const campaign = await this.campaignService.getCampaignById(campaignId);
+    return campaign || { message: 'Campaign not found' };
   }
 
   @Post(':campaignId/submit')

@@ -20,7 +20,11 @@ export class CampaignService {
   }
 
   async getCampaignById(campaignId: string): Promise<Campaign> {
-    return this.campaignModel.findById(campaignId).exec();
+    const campaign = await this.campaignModel.findById(campaignId).exec();
+    if (!campaign) {
+      throw new Error('Campaign not found');
+    }
+    return campaign;
   }
 
   async submitContent(campaignId: string, userId: string, content: string) {
