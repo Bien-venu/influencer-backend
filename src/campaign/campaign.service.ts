@@ -49,6 +49,7 @@ export class CampaignService {
     submissionId: string,
     status: string,
   ) {
+    console.log(campaignId, submissionId, status);
     const campaign = await this.campaignModel.findById(campaignId);
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${campaignId} not found`);
