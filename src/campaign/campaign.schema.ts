@@ -15,8 +15,26 @@ export class Campaign extends Document {
   @Prop()
   instructions: string;
 
-  @Prop()
-  submissions: { userId: string; content: string }[];
+  @Prop({
+    type: [
+      {
+        userId: { type: String, required: true },
+        content: { type: String, required: true },
+        submissionDate: { type: Date, required: true },
+        status: {
+          type: String,
+          enum: ['pending', 'approved', 'rejected'],
+          default: 'pending',
+        },
+      },
+    ],
+  })
+  submissions: {
+    userId: string;
+    content: string;
+    submissionDate: Date;
+    status: string;
+  }[];
 }
 
 export const CampaignSchema = SchemaFactory.createForClass(Campaign);

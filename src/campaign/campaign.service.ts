@@ -37,11 +37,38 @@ export class CampaignService {
             userId,
             content,
             submissionDate,
+            status: 'pending',
           },
         },
       },
       { new: true },
     );
+  }
+  async updateSubmissionStatus(
+    campaignId: string,
+    submissionId: string,
+    status: string,
+  ) {
+    const campaign = await this.campaignModel.findById(campaignId);
+    if (!campaign) {
+      throw new NotFoundException(`Campaign with ID ${campaignId} not found`);
+    }
+
+    const submission = campaign.submissions.find(
+      (sub) => sub.userId === submissionId,
+    );
+
+    if (!submission) {
+      throw new NotFoundException(
+        `Submission with ID ${submissionId} not found`,
+      );
+    }
+
+    submission.status = status;
+
+    await campaign.save();
+
+    return campaign;
   }
 
   async createCampaign(
