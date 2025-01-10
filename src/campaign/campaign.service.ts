@@ -16,7 +16,6 @@ export class CampaignService {
   }
 
   async getCampaignById(id: string): Promise<Campaign | null> {
-    console.log(id);
     const campaign = await this.campaignModel.findById(id);
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
