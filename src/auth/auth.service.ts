@@ -48,4 +48,15 @@ export class AuthService {
       username: user.username,
     };
   }
+
+  async getUsers(userId?: string) {
+    if (userId) {
+      const user = await this.userModel.findById(userId).exec();
+      if (!user) {
+        throw new Error(`User with ID ${userId} not found`);
+      }
+      return user;
+    }
+    return this.userModel.find().exec();
+  }
 }

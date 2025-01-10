@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Query, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -20,5 +20,10 @@ export class AuthController {
     @Body('password') password: string,
   ) {
     return this.authService.login(email, password);
+  }
+
+  @Get('users')
+  async getUsers(@Query('userId') userId?: string) {
+    return this.authService.getUsers(userId);
   }
 }
