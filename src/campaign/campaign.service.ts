@@ -19,6 +19,10 @@ export class CampaignService {
     return this.campaignModel.find({ 'submissions.userId': userId });
   }
 
+  async getCampaignById(campaignId: string): Promise<Campaign> {
+    return this.campaignModel.findById(campaignId).exec();
+  }
+
   async submitContent(campaignId: string, userId: string, content: string) {
     return this.campaignModel.findByIdAndUpdate(
       campaignId,

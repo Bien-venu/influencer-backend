@@ -16,6 +16,11 @@ export class CampaignController {
     return this.campaignService.getCampaignsByUser(userId);
   }
 
+  @Get(':campaignId')
+  async getCampaignById(@Param('campaignId') campaignId: string) {
+    return this.campaignService.getCampaignById(campaignId);
+  }
+
   @Post(':campaignId/submit')
   async submitContent(
     @Param('campaignId') campaignId: string,
