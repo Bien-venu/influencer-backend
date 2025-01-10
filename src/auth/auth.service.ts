@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './user.schema';
@@ -49,14 +54,11 @@ export class AuthService {
     };
   }
 
-  async getUsers(userId?: string) {
-    if (userId) {
-      const user = await this.userModel.findById(userId).exec();
-      if (!user) {
-        throw new Error(`User with ID ${userId} not found`);
-      }
-      return user;
+  async getUserById(userId: string) {
+    const user = await this.userModel.findById(userId).exec();
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
     }
-    return this.userModel.find().exec();
+    return user;
   }
 }
