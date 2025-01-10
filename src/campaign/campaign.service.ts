@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Campaign } from './campaign.schema';
@@ -17,6 +17,14 @@ export class CampaignService {
 
   async getCampaignsByUser(userId: string) {
     return this.campaignModel.find({ 'submissions.userId': userId });
+  }
+
+  async getCampaignById(id: string): Promise<Campaign | null> {
+    const campaign = await this.campaignModel.findById(id).exec();
+    if (!campaign) {
+      throw new NotFoundException(`Campaign with ID ${id} not found`);
+    }
+    return campaign;
   }
 
   async submitContent(campaignId: string, userId: string, content: string) {
