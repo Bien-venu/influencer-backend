@@ -13,6 +13,13 @@ export class AuthService {
   ) {}
 
   async register(email: string, password: string, username: string) {
+    const existingUser = await this.userModel.findOne({
+      $or: [{ email }, { username }],
+    });
+    if (existingUser) {
+      throw new Error('User with the same email or username already exists');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new this.userModel({
       email,
@@ -24,10 +31,15 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await this.userModel.findOne({ email });
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (!user) {
+      throw new Error('User not registered');
+    }
+
+    if (await bcrypt.compare(password, user.password)) {
       const payload = { email: user.email, sub: user._id };
       return { access_token: this.jwtService.sign(payload) };
     }
+
     throw new Error('Invalid credentials');
   }
 }
