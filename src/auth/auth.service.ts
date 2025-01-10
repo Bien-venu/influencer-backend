@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './user.schema';
@@ -17,7 +17,9 @@ export class AuthService {
       $or: [{ email }, { username }],
     });
     if (existingUser) {
-      throw new Error('User with the same email or username already exists');
+      throw new BadRequestException(
+        'User with the same email or username already exists',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,14 +34,15 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await this.userModel.findOne({ email });
     if (!user) {
-      throw new Error('User not registered');
+      throw new BadRequestException('User not registered');
     }
 
-    if (await bcrypt.compare(password, user.password)) {
-      const payload = { email: user.email, sub: user._id };
-      return { access_token: this.jwtService.sign(payload) };
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Invalid credentials');
     }
 
-    throw new Error('Invalid credentials');
+    const payload = { email: user.email, sub: user._id };
+    return { access_token: this.jwtService.sign(payload) };
   }
 }
