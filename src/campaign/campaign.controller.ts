@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
+
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 
@@ -14,12 +16,6 @@ export class CampaignController {
   @Get(':userId')
   async getCampaigns(@Param('userId') userId: string) {
     return this.campaignService.getCampaignsByUser(userId);
-  }
-
-  @Get(':campaignId')
-  async getCampaignById(@Param('campaignId') campaignId: string) {
-    const campaign = await this.campaignService.getCampaignById(campaignId);
-    return campaign || { message: 'Campaign not found' };
   }
 
   @Post(':campaignId/submit')

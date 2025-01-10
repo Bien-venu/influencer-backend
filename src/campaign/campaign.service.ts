@@ -19,14 +19,6 @@ export class CampaignService {
     return this.campaignModel.find({ 'submissions.userId': userId });
   }
 
-  async getCampaignById(campaignId: string): Promise<Campaign> {
-    const campaign = await this.campaignModel.findById(campaignId).exec();
-    if (!campaign) {
-      throw new Error('Campaign not found');
-    }
-    return campaign;
-  }
-
   async submitContent(campaignId: string, userId: string, content: string) {
     return this.campaignModel.findByIdAndUpdate(
       campaignId,
