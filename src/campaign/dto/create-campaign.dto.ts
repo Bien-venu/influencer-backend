@@ -3,5 +3,4 @@ export class CreateCampaignDto {
   status: string;
   deadline: string;
   instructions?: string;
-  submissions?: { userId: string; content: string }[];
 }
