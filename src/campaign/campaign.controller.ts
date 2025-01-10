@@ -6,6 +6,11 @@ import { CreateCampaignDto } from './dto/create-campaign.dto';
 export class CampaignController {
   constructor(private readonly campaignService: CampaignService) {}
 
+  @Get()
+  async getAllCampaigns() {
+    return this.campaignService.getAllCampaigns();
+  }
+
   @Get(':userId')
   async getCampaigns(@Param('userId') userId: string) {
     return this.campaignService.getCampaignsByUser(userId);

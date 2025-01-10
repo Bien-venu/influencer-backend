@@ -11,6 +11,10 @@ export class CampaignService {
     @InjectModel(Campaign.name) private campaignModel: Model<Campaign>,
   ) {}
 
+  async getAllCampaigns() {
+    return this.campaignModel.find().exec();
+  }
+
   async getCampaignsByUser(userId: string) {
     return this.campaignModel.find({ 'submissions.userId': userId });
   }
